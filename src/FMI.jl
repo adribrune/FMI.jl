@@ -128,8 +128,6 @@ function (str::Union{fmi2Struct, fmi3Struct})(; t::Tuple{Float64, Float64}, kwar
 end
 
 """
-#ToDo
-
     fmiGetState(str::fmi2Struct)
 
 Makes a copy of the internal FMU state and returns a pointer to this copy.
@@ -155,12 +153,12 @@ function fmiGetState(str::fmi2Struct)
 end
 
 """
-
     fmiFreeState!(str::fmi2Struct, c::FMU2Component, state::fmi2FMUstate)
-
     fmiFreeState!(str::fmi2Struct, c::FMU2Component, FMUstate::Ref{fmi2FMUstate})
 
 Free the memory for the allocated FMU state
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `str::fmi2Struct`:  Representative for an FMU in the FMI 2.0.2 Standard.
@@ -186,18 +184,18 @@ More detailed:
 - FMISpec2.0.2[p.16]: 2.1.2 Platform Dependent Definitions (fmi2TypesPlatform.h)
 - FMISpec2.0.2[p.16]: 2.1.3 Status Returned by Functions
 - FMISpec2.0.2[p.25]: 2.1.8 Getting and Setting the Complete FMU State
-
-See also [`fmi2FreeFMUstate!`](@ref),[`fmi2FMUstate`](@ref), [`fmi2Struct`](@ref), [`FMU2`](@ref), [`FMU2Component`](@ref).
-    """
+See also [`fmi2FreeFMUstate!`](@ref).
+"""
 function fmiFreeState!(str::fmi2Struct, args...; kwargs...)
     fmi2FreeFMUstate!(str, args...; kwargs...)
 end
 
 """
-
     fmiSetState(str::fmi2Struct, c::FMU2Component, FMUstate::fmi2FMUstate)
 
 Sets the FMU to the given state
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `str::fmi2Struct`:  Representative for an FMU in the FMI 2.0.2 Standard.
@@ -222,18 +220,18 @@ More detailed:
 - FMISpec2.0.2[p.16]: 2.1.2 Platform Dependent Definitions (fmi2TypesPlatform.h)
 - FMISpec2.0.2[p.16]: 2.1.3 Status Returned by Functions
 - FMISpec2.0.2[p.25]: 2.1.8 Getting and Setting the Complete FMU State
-
-See also [`fmi2GetFMUstate`](@ref), [`fmi2Struct`](@ref), [`FMU2`](@ref), [`FMU2Component`](@ref).
+See also [`fmi2SetFMUstate`](@ref).
 """
 function fmiSetState(str::fmi2Struct, args...; kwargs...)
     fmi2SetFMUstate(str, args...; kwargs...)
 end
 
 """
-
     fmi2GetDependencies(fmu::FMU2)
 
 Building dependency matrix `dim x dim` for fast look-ups on variable dependencies (`dim` is number of states).
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `fmu::FMU2`: Mutable Struct representing a FMU.
@@ -245,7 +243,6 @@ Building dependency matrix `dim x dim` for fast look-ups on variable dependencie
 - FMISpec2.0.2 Link: [https://fmi-standard.org/](https://fmi-standard.org/)
 - FMISpec2.0.2[p.22]: 2.1.4 Inquire Platform and Version Number of Header Files
 - FMISpec2.0.2[p.16]: 2.1.2 Platform Dependent Definitions
-
 See also [`fmi2GetDependencies`](@ref).
 """
 function fmiGetDependencies(fmu::FMU2)
@@ -253,10 +250,11 @@ function fmiGetDependencies(fmu::FMU2)
 end
 
 """
-
     fmiStringToValueReference(dataStruct::Union{FMU2, fmi2ModelDescription, FMU3, fmmi3ModelDescription}, identifier::Union{String, AbstractArray{String}})
 
 Returns the ValueReference coresponding to the variable identifier.
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `dataStruct::Union{FMU2, fmi2ModelDescription, FMU3, fmmi3ModelDescription}`: Model of the type FMU2/FMU3 or the Model Description of fmi2/fmi3. Same for Model of type FMU3 or the Model Description of fmi3
@@ -266,8 +264,7 @@ Returns the ValueReference coresponding to the variable identifier.
 - FMISpec2.0.2 Link: [https://fmi-standard.org/](https://fmi-standard.org/)
 - FMISpec2.0.2[p.22]: 2.1.4 Inquire Platform and Version Number of Header Files
 - FMISpec2.0.2[p.16]: 2.1.2 Platform Dependent Definitions
-
-See also [`fmi2StringToValueReference`](@ref), [`fmi3StringToValueReference`](@ref).
+See also [`fmi2StringToValueReference`](@ref).
 """
 function fmiStringToValueReference(dataStruct::Union{FMU2, fmi2ModelDescription}, identifier::Union{String, AbstractArray{String}})
     fmi2StringToValueReference(dataStruct, identifier)
@@ -278,10 +275,11 @@ end
 
 # Wrapping modelDescription Functions
 """
-
     fmiGetModelName(str::Union{fmi2StructMD, fmi3StructMD})
 
 Returns the tag 'modelName' from the model description.
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `str::Union{fmi2StructMD, fmi3StructMD}`:  Representative for an FMU in the [FMI 2.0.2 Standard](https://fmi-standard.org/) or [FMI 3.0 Standard](https://fmi-standard.org/). Other notation:
@@ -297,8 +295,7 @@ Returns the tag 'modelName' from the model description.
 - FMISpec2.0.2 Link: [https://fmi-standard.org/](https://fmi-standard.org/)
 - FMISpec2.0.2[p.22]: 2.1.4 Inquire Platform and Version Number of Header Files
 - FMISpec2.0.2[p.16]: 2.1.2 Platform Dependent Definitions
-
-See also [`FMU2`](@ref), [`FMU2Component`](@ref), [`fmi2ModelDescription`](@ref), [`FMU3`](@ref), [`FMU3Component`](@ref), [`fmi3ModelDescription`](@ref).
+See also [`fmi2GetModelName`](@ref).
 """
 function fmiGetModelName(str::fmi2StructMD)
     fmi2GetModelName(str)
@@ -308,10 +305,11 @@ function fmiGetModelName(str::fmi3StructMD)
 end
 
 """
-
     fmiGetGUID(str::fmi2StructMD)
 
 Returns the tag 'guid' from the model description.
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `str::fmi2StructMD`:  Representative for an FMU in the [FMI 2.0.2 Standard](https://fmi-standard.org/). More detailed:  `fmi2StructMD =  Union{FMU2, FMU2Component, fmi2ModelDescription}`
@@ -323,18 +321,18 @@ Returns the tag 'guid' from the model description.
 - FMISpec2.0.2 Link: [https://fmi-standard.org/](https://fmi-standard.org/)
 - FMISpec2.0.2[p.22]: 2.1.4 Inquire Platform and Version Number of Header Files
 - FMISpec2.0.2[p.16]: 2.1.2 Platform Dependent Definitions
-
-See also [`fmi2GetGUID`](@ref), [`fmi2StructMD`](@ref), [`FMU2`](@ref), [`FMU2Component`](@ref), [`fmi2ModelDescription`](@ref).
+See also [`fmi2GetGUID`](@ref).
 """
 function fmiGetGUID(str::fmi2StructMD)
     fmi2GetGUID(str)
 end
 
 """
-
     fmiGetGenerationTool(str::fmi2StructMD)
 
 Returns the tag 'generationtool' from the model description.
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `str::fmi2StructMD`:  Representative for an FMU in the [FMI 2.0.2 Standard](https://fmi-standard.org/).
@@ -351,17 +349,18 @@ Returns the tag 'generationtool' from the model description.
 - FMISpec2.0.2[p.22]: 2.1.4 Inquire Platform and Version Number of Header Files
 - FMISpec2.0.2[p.16]: 2.1.2 Platform Dependent Definitions
 
-See also [`fmi2GetGenerationTool`](@ref), [`fmi2StructMD`](@ref), [`FMU2`](@ref), [`FMU2Component`](@ref), [`fmi2ModelDescription`](@ref).
+See also [`fmi2GetGenerationTool`](@ref)
 """
 function fmiGetGenerationTool(str::fmi2StructMD)
     fmi2GetGenerationTool(str)
 end
 
 """
-
     fmiGetGenerationDateAndTime(str::fmi2StructMD)
 
 Returns the tag 'generationdateandtime' from the model description.
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `str::fmi2StructMD`:  Representative for an FMU in the [FMI 2.0.2 Standard](https://fmi-standard.org/).
@@ -378,17 +377,18 @@ Returns the tag 'generationdateandtime' from the model description.
 - FMISpec2.0.2[p.22]: 2.1.4 Inquire Platform and Version Number of Header Files
 - FMISpec2.0.2[p.16]: 2.1.2 Platform Dependent Definitions
 
-See also [`fmi2GetGenerationDateAndTime`](@ref), [`fmi2StructMD`](@ref), [`FMU2`](@ref), [`FMU2Component`](@ref), [`fmi2ModelDescription`](@ref).
+See also [`fmi2GetGenerationDateAndTime`](@ref).
 """
 function fmiGetGenerationDateAndTime(str::fmi2StructMD)
     fmi2GetGenerationDateAndTime(str)
 end
 
 """
-
     fmiGetVariableNamingConvention(str::fmi2StructMD)
 
 Returns the tag 'varaiblenamingconvention' from the model description.
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `str::fmi2StructMD`:  Representative for an FMU in the [FMI 2.0.2 Standard](https://fmi-standard.org/).
@@ -405,17 +405,18 @@ Returns the tag 'varaiblenamingconvention' from the model description.
 - FMISpec2.0.2[p.22]: 2.1.4 Inquire Platform and Version Number of Header Files
 - FMISpec2.0.2[p.16]: 2.1.2 Platform Dependent Definitions
 
-See also [`fmi2GetVariableNamingConvention`](@ref), [`fmi2StructMD`](@ref), [`FMU2`](@ref), [`FMU2Component`](@ref), [`fmi2ModelDescription`](@ref).
+See also [`fmi2GetVariableNamingConvention`](@ref).
 """
 function fmiGetVariableNamingConvention(str::fmi2StructMD)
     fmi2GetVariableNamingConvention(str)
 end
 
 """
-
     fmiGetNumberOfEventIndicators(str::fmi2StructMD)
 
 Returns the tag 'numberOfEventIndicators' from the model description.
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `str::fmi2StructMD`:  Representative for an FMU in the [FMI 2.0.2 Standard](https://fmi-standard.org/).
@@ -432,17 +433,18 @@ More detailed: `fmi2StructMD =  Union{FMU2, FMU2Component, fmi2ModelDescription}
 - FMISpec2.0.2[p.22]: 2.1.4 Inquire Platform and Version Number of Header Files
 - FMISpec2.0.2[p.16]: 2.1.2 Platform Dependent Definitions
 
-See also [`fmi2GetNumberOfEventIndicators`](@ref), [`fmi2StructMD`](@ref), [`FMU2`](@ref), [`FMU2Component`](@ref), [`fmi2ModelDescription`](@ref).
+See also [`fmi2GetNumberOfEventIndicators`](@ref).
 """
 function fmiGetNumberOfEventIndicators(str::fmi2StructMD)
     fmi2GetNumberOfEventIndicators(str)
 end
 
 """
-
     fmiGetModelIdentifier(fmu::FMU2)
 
 Returns the tag 'modelIdentifier' from CS or ME section.
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
  - `fmu::FMU2`: Mutable struct representing a FMU and all it instantiated instances in the [FMI 2.0.2 Standard](https://fmi-standard.org/).
@@ -456,17 +458,18 @@ Returns the tag 'modelIdentifier' from CS or ME section.
 - FMISpec2.0.2[p.22]: 2.1.4 Inquire Platform and Version Number of Header Files
 - FMISpec2.0.2[p.16]: 2.1.2 Platform Dependent Definitions
 
-Also see [`fmi2GetModelIdentifier`](@ref), [`FMU2`](@ref).
+Also see [`fmi2GetModelIdentifier`](@ref).
 """
 function fmiGetModelIdentifier(fmu::FMU2)
     fmi2GetModelIdentifier(fmu.modelDescription; type=fmu.type)
 end
 
 """
-
     fmiCanGetSetState(str::fmi2StructMD)
 
 Returns true, if the FMU supports the getting/setting of states
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `str::fmi2StructMD`:  Representative for an FMU in the [FMI 2.0.2 Standard](https://fmi-standard.org/).
@@ -483,17 +486,18 @@ More detailed: `fmi2StructMD =  Union{FMU2, FMU2Component, fmi2ModelDescription}
  - FMISpec2.0.2[p.22]: 2.1.4 Inquire Platform and Version Number of Header Files
  - FMISpec2.0.2[p.16]: 2.1.2 Platform Dependent Definitions
 
-See also [`fmi2CanGetSetState`](@ref), [`fmi2StructMD`](@ref), [`FMU2`](@ref), [`FMU2Component`](@ref), [`fmi2ModelDescription`](@ref).
+See also [`fmi2CanGetSetState`](@ref).
 """
 function fmiCanGetSetState(str::fmi2StructMD)
     fmi2CanGetSetState(str)
 end
 
 """
-
     fmiCanSerializeFMUstate(str::fmi2StructMD)
 
 Returns true, if the FMU state can be serialized
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `str::fmi2StructMD`:  Representative for an FMU in the [FMI 2.0.2 Standard](https://fmi-standard.org/).
@@ -510,17 +514,18 @@ More detailed: `fmi2StructMD =  Union{FMU2, FMU2Component, fmi2ModelDescription}
 - FMISpec2.0.2[p.22]: 2.1.4 Inquire Platform and Version Number of Header Files
 - FMISpec2.0.2[p.16]: 2.1.2 Platform Dependent Definitions
 
-See also [`fmi2CanSerializeFMUstate`](@ref), [`fmi2StructMD`](@ref), [`FMU2`](@ref), [`FMU2Component`](@ref), [`fmi2ModelDescription`](@ref).
+See also [`fmi2CanSerializeFMUstate`](@ref).
 """
 function fmiCanSerializeFMUstate(str::fmi2StructMD)
     fmi2CanSerializeFMUstate(str)
 end
 
 """
-
     fmiProvidesDirectionalDerivative(str::fmi2StructMD)
 
 Returns true, if the FMU provides directional derivatives
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `str::fmi2StructMD`:  Representative for an FMU in the [FMI 2.0.2 Standard](https://fmi-standard.org/).
@@ -532,17 +537,18 @@ More detailed: `fmi2StructMD =  Union{FMU2, FMU2Component, fmi2ModelDescription}
 # Returns
 - `::Bool`: The function `fmi2ProvidesDirectionalDerivative` returns True, if the FMU provides directional derivatives.
 
-See also [`fmi2ProvidesDirectionalDerivative`](@ref), [`fmi2StructMD`](@ref), [`FMU2`](@ref), [`FMU2Component`](@ref), [`fmi2ModelDescription`](@ref).
+See also [`fmi2ProvidesDirectionalDerivative`](@ref).
 """
 function fmiProvidesDirectionalDerivative(str::fmi2StructMD)
     fmi2ProvidesDirectionalDerivative(str)
 end
 
 """
-
     fmiIsCoSimulation(str::fmi2StructMD)
 
 Returns true, if the FMU supports co simulation
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `str::fmi2StructMD`:  Representative for an FMU in the [FMI 2.0.2 Standard](https://fmi-standard.org/).
@@ -554,17 +560,18 @@ More detailed: `fmi2StructMD =  Union{FMU2, FMU2Component, fmi2ModelDescription}
 # Returns
  - `::Bool`: The function `fmi2IsCoSimulation` returns True, if the FMU supports co simulation
 
-See also [`fmi2IsCoSimulation`](@ref), [`fmi2StructMD`](@ref), [`FMU2`](@ref), [`FMU2Component`](@ref), [`fmi2ModelDescription`](@ref).
+See also [`fmi2IsCoSimulation`](@ref).
 """
 function fmiIsCoSimulation(str::fmi2StructMD)
     fmi2IsCoSimulation(str)
 end
 
 """
-
     fmiIsModelExchange(str::fmi2StructMD)
 
 Returns true, if the FMU supports model exchange
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `str::fmi2StructMD`:  Representative for an FMU in the [FMI 2.0.2 Standard](https://fmi-standard.org/).
@@ -581,7 +588,7 @@ More detailed: `fmi2StructMD =  Union{FMU2, FMU2Component, fmi2ModelDescription}
  - FMISpec2.0.2[p.22]: 2.1.4 Inquire Platform and Version Number of Header Files
  - FMISpec2.0.2[p.16]: 2.1.2 Platform Dependent Definitions
 
-See also [`fmi2IsModelExchange`](@ref), [`fmi2StructMD`](@ref), [`FMU2`](@ref), [`FMU2Component`](@ref), [`fmi2ModelDescription`](@ref).
+See also [`fmi2IsModelExchange`](@ref).
 """
 function fmiIsModelExchange(str::fmi2StructMD)
     fmi2IsModelExchange(str)
@@ -590,10 +597,11 @@ end
 # Multiple Dispatch variants for FMUs with version 2.0.X
 
 """
-
-   fmiLoad(pathToFMU::String; unpackPath=nothing, type=nothing)
+    fmiLoad(pathToFMU::String; unpackPath=nothing, type=nothing)
 
 Load FMUs independent of the FMI version, currently supporting version 2.0.X.
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `pathToFMU::String`: String that contains the paths of ziped and unziped FMU folders.
@@ -617,10 +625,11 @@ function fmiLoad(args...; kwargs...)
 end
 
 """
-
     fmiReload(fmu::FMU2)
 
 Reloads the FMU-binary. This is useful, if the FMU does not support a clean reset implementation.
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `fmu::FMU2`: Mutable struct representing a FMU and all it instantiated instances in the [FMI 2.0.2 Standard](https://fmi-standard.org/).
@@ -637,16 +646,19 @@ function fmiReload(fmu::FMU2, args...; kwargs...)
 end
 
 """
-
-    fmiSimulate(str::fmi2Struct, t_start::Union{Real, Nothing} = nothing, t_stop::Union{Real, Nothing} = nothing;
+    fmiSimulate(str::fmi2Struct, tspan::Union{Tuple{Float64, Float64}, Nothing}=nothing;
                 tolerance::Union{Real, Nothing} = nothing,
                 dt::Union{Real, Nothing} = nothing,
                 solver = nothing,
                 customFx = nothing,
                 recordValues::fmi2ValueReferenceFormat = nothing,
-                saveat = [],
-                setup::Bool = true,
+                saveat = nothing,
+                x0::Union{AbstractArray{<:Real}, Nothing} = nothing,
+                setup::Union{Bool, Nothing} = nothing,
                 reset::Union{Bool, Nothing} = nothing, # nothing = auto
+                instantiate::Union{Bool, Nothing} = nothing,
+                freeInstance::Union{Bool, Nothing} = nothing,
+                terminate::Union{Bool, Nothing} = nothing,
                 inputValueReferences::fmi2ValueReferenceFormat = nothing,
                 inputFunction = nothing,
                 parameters::Union{Dict{<:Any, <:Any}, Nothing} = nothing,
@@ -661,8 +673,7 @@ Starts a simulation of the FMU instance for the matching FMU type, if both types
 More detailed: `fmi2Struct = Union{FMU2, FMU2Component}`
  - `str::FMU2`: Mutable struct representing a FMU and all it instantiated instances in the [FMI 2.0.2 Standard](https://fmi-standard.org/).
  - `str::FMU2Component`: Mutable struct represents an instantiated instance of an FMU in the [FMI 2.0.2 Standard](https://fmi-standard.org/).
-- `t_start::Union{Real, Nothing} = nothing`: Set the start time to a value of type Real or the default value from the model description is used.
-- `t_stop::Union{Real, Nothing} = nothing`: Set the end time to a value of type Real or the default value from the model description is used.
+- `tspan::Union{Tuple{Float64, Float64}, Nothing}=nothing`: Sets the time span as a tuple or the default value from the model description is used.  
 
 # Keywords
 - `tolerance::Union{Real, Nothing} = nothing`: Real number to set the tolerance for any OED-solver
@@ -671,12 +682,19 @@ More detailed: `fmi2Struct = Union{FMU2, FMU2Component}`
 - `customFx = nothing`: [deperecated] Ability to give a custom state derivative function ẋ=f(x,t)
 - `recordValues::fmi2ValueReferenceFormat = nothing`: AbstractArray of variables (strings or variableIdentifiers) to record. Results are returned as `DiffEqCallbacks.SavedValues`
 - `saveat = []`: Time points to save values at (interpolated). More Info: [DifferentialEquations.jl Documentation](https://diffeq.sciml.ai/stable/basics/common_solver_opts/#Output-Control)
-- `setup::Bool = true`: Boolean, if FMU should be setup (default: setup=true)
-- `reset::Union{Bool, Nothing} = nothing`: Boolean, if FMU should be reset before simulation (default: reset:=auto)
+- `saveat = nothing`: Time points to save values at (interpolated). More Info: [DifferentialEquations.jl Documentation](https://diffeq.sciml.ai/stable/basics/common_solver_opts/#Output-Control)
+- `x0::Union{AbstractArray{<:Real}, Nothing} = nothing`: Stores the specific value of `fmi2ScalarVariable` containing the modelVariables with the identical fmi2ValueReference to the input variable vr (vr = vrs[i]). And is therefore passed within prepareSolveFMU to fmi2Set , to set the start state.
+- `setup::Bool = true`: Boolean value if FMU is to be set up (default: setup=true).
+- `reset::Union{Bool, Nothing} = nothing`: Boolean value that determines whether the FMU should be reset before simulation (default: reset:=auto).
+- `instantiate::Union{Bool, Nothing} = nothing`: Boolean value that decides whether to create a new instance of the specified fmu.
+- `freeInstance::Union{Bool, Nothing} = nothing`: Boolean value that determines whether to dispose of the given instance, unload the loaded model, and free the allocated memory and other resources allocated by the FMU interface functions.
+- `terminate::Union{Bool, Nothing} = nothing`: Boolean value that tells the FMU that the simulation run will be aborted.
 - `inputValueReferences::fmi2ValueReferenceFormat = nothing`: AbstractArray of input variables (strings or variableIdentifiers) to set at every simulation step
 - `inputFunction = nothing`: Function to retrieve the values to set the inputs to
 - `parameters::Union{Dict{<:Any, <:Any}, Nothing} = nothing`: Dictionary of parameter variables (strings or variableIdentifiers) and values (Real, Integer, Boolean, String) to set parameters during initialization
 - `dtmax::Union{Real, Nothing} = nothing`: Real number for setting maximum dt for adaptive timestepping for the ODE solver. The default values are package dependent. More Info: [DifferentialEquations.jl Documentation](https://diffeq.sciml.ai/stable/basics/common_solver_opts/#Stepsize-Control)
+- `callbacks = []`: custom callbacks to add.
+- `showProgress::Bool = true`: Boolean value that determines whether a progress bar is generated for a task
 - `kwargs...`: Further parameters of already defined functions `solve(args..., kwargs...)` from the library [DifferentialEquations.jl](https://diffeq.sciml.ai/stable/#DifferentialEquations.jl:-Scientific-Machine-Learning-(SciML)-Enabled-Simulation-and-Estimation)
 
 # Returns
@@ -690,16 +708,14 @@ More detailed: `fmi2Struct = Union{FMU2, FMU2Component}`
 - FMISpec2.0.2[p.22]: 2.1.4 Inquire Platform and Version Number of Header Files
 - FMISpec2.0.2[p.16]: 2.1.2 Platform Dependent Definitions
 
-See also [`fmi2Simulate`](@ref), [`fmi2SimulateME`](@ref), [`fmi2SimulateCS`](@ref), [`fmi2Struct`](@ref), [`FMU2`](@ref), [`FMU2Component`](@ref).
-
+See also [`fmi2Simulate`](@ref), [`fmi2SimulateME`](@ref), [`fmi2SimulateCS`](@ref).
 """
 function fmiSimulate(str::fmi2Struct, tspan::Union{Tuple{Float64, Float64}, Nothing}=nothing, args...; kwargs...)
     fmi2Simulate(str, tspan, args...; kwargs...)
 end
 
 """
-
-    fmiSimulateCS(str::fmi2Struct, t_start::Union{Real, Nothing} = nothing, t_stop::Union{Real, Nothing} = nothing;
+    fmiSimulateCS(str::fmi2Struct, tspan::Union{Tuple{Float64, Float64}, Nothing}=nothing;
                 tolerance::Union{Real, Nothing} = nothing,
                 dt::Union{Real, Nothing} = nothing,
                 solver = nothing,
@@ -708,8 +724,12 @@ end
                 saveat = [],
                 setup::Bool = true,
                 reset::Union{Bool, Nothing} = nothing, # nothing = auto
+                instantiate::Union{Bool, Nothing} = nothing,
+                freeInstance::Union{Bool, Nothing} = nothing,
+                terminate::Union{Bool, Nothing} = nothing,
                 inputValueReferences::fmi2ValueReferenceFormat = nothing,
                 inputFunction = nothing,
+                showProgress::Bool=true,
                 parameters::Union{Dict{<:Any, <:Any}, Nothing} = nothing,
                 dtmax::Union{Real, Nothing} = nothing,
                 kwargs...)
@@ -722,8 +742,7 @@ Starts a simulation of the Co-Simulation FMU instance.
 More detailed: `fmi2Struct = Union{FMU2, FMU2Component}`
  - `str::FMU2`: Mutable struct representing a FMU and all it instantiated instances in the [FMI 2.0.2 Standard](https://fmi-standard.org/).
  - `str::FMU2Component`: Mutable struct represents an instantiated instance of an FMU in the [FMI 2.0.2 Standard](https://fmi-standard.org/).
-- `t_start::Union{Real, Nothing} = nothing`: Set the start time to a value of type Real or the default value from the model description is used.
-- `t_stop::Union{Real, Nothing} = nothing`: Set the end time to a value of type Real or the default value from the model description is used.
+- `tspan::Union{Tuple{Float64, Float64}, Nothing}=nothing`: Sets the time span as a tuple or the default value from the model description is used.  
 
 # Keywords
 - `tolerance::Union{Real, Nothing} = nothing`: Real number to set the tolerance for any OED-solver
@@ -734,8 +753,12 @@ More detailed: `fmi2Struct = Union{FMU2, FMU2Component}`
 - `saveat = []`: Time points to save values at (interpolated). More Info: [DifferentialEquations.jl Documentation](https://diffeq.sciml.ai/stable/basics/common_solver_opts/#Output-Control)
 - `setup::Bool = true`: Boolean, if FMU should be setup (default: setup=true)
 - `reset::Union{Bool, Nothing} = nothing`: Boolean, if FMU should be reset before simulation (default: reset:=auto)
+- `instantiate::Union{Bool, Nothing} = nothing`: Boolean value that decides whether to create a new instance of the specified fmu.
+- `freeInstance::Union{Bool, Nothing} = nothing`: Boolean value that determines whether to dispose of the given instance, unload the loaded model, and free the allocated memory and other resources allocated by the FMU interface functions.
+- `terminate::Union{Bool, Nothing} = nothing`: Boolean value that tells the FMU that the simulation run will be aborted.
 - `inputValueReferences::fmi2ValueReferenceFormat = nothing`: AbstractArray of input variables (strings or variableIdentifiers) to set at every simulation step
 - `inputFunction = nothing`: Function to retrieve the values to set the inputs to
+- `showProgress::Bool = true`: Boolean value that determines whether a progress bar is generated for a task
 - `parameters::Union{Dict{<:Any, <:Any}, Nothing} = nothing`: Dictionary of parameter variables (strings or variableIdentifiers) and values (Real, Integer, Boolean, String) to set parameters during initialization
 - `dtmax::Union{Real, Nothing} = nothing`: Real number for setting maximum dt for adaptive timestepping for the ODE solver. The default values are package dependent. More Info: [DifferentialEquations.jl Documentation](https://diffeq.sciml.ai/stable/basics/common_solver_opts/#Stepsize-Control)
 - `kwargs...`: Further parameters of already defined functions `solve(args..., kwargs...)` from the library [DifferentialEquations.jl](https://diffeq.sciml.ai/stable/#DifferentialEquations.jl:-Scientific-Machine-Learning-(SciML)-Enabled-Simulation-and-Estimation)
@@ -749,28 +772,32 @@ More detailed: `fmi2Struct = Union{FMU2, FMU2Component}`
 - FMISpec2.0.2[p.22]: 2.1.4 Inquire Platform and Version Number of Header Files
 - FMISpec2.0.2[p.16]: 2.1.2 Platform Dependent Definitions
 
-See also [`fmi2SimulateCS`](@ref), [`fmi2Simulate`](@ref), [`fmi2SimulateME`](@ref), [`fmi2Struct`](@ref), [`FMU2`](@ref), [`FMU2Component`](@ref).
-
+See also [`fmi2SimulateCS`](@ref), [`fmi2Simulate`](@ref), [`fmi2SimulateME`](@ref).
 """
 function fmiSimulateCS(str::fmi2Struct, tspan::Union{Tuple{Float64, Float64}, Nothing}=nothing, args...; kwargs...)
     fmi2SimulateCS(str, tspan, args...; kwargs...)
 end
 
 """
-
     fmiSimulateME(str::fmi2Struct, t_start::Union{Real, Nothing} = nothing, t_stop::Union{Real, Nothing} = nothing;
                 tolerance::Union{Real, Nothing} = nothing,
                 dt::Union{Real, Nothing} = nothing,
                 solver = nothing,
                 customFx = nothing,
                 recordValues::fmi2ValueReferenceFormat = nothing,
-                saveat = [],
-                setup::Bool = true,
-                reset::Union{Bool, Nothing} = nothing, # nothing = auto
+                saveat = nothing,
+                x0::Union{AbstractArray{<:Real}, Nothing} = nothing,
+                setup::Union{Bool, Nothing} = nothing,
+                reset::Union{Bool, Nothing} = nothing,
+                instantiate::Union{Bool, Nothing} = nothing,
+                freeInstance::Union{Bool, Nothing} = nothing,
+                terminate::Union{Bool, Nothing} = nothing,
                 inputValueReferences::fmi2ValueReferenceFormat = nothing,
                 inputFunction = nothing,
                 parameters::Union{Dict{<:Any, <:Any}, Nothing} = nothing,
                 dtmax::Union{Real, Nothing} = nothing,
+                callbacks = [],
+                showProgress::Bool = true,
                 kwargs...)
 
 Simulates a FMU instance for the given simulation time interval.
@@ -781,8 +808,7 @@ Simulates a FMU instance for the given simulation time interval.
 More detailed: `fmi2Struct = Union{FMU2, FMU2Component}`
  - `str::FMU2`: Mutable struct representing a FMU and all it instantiated instances in the [FMI 2.0.2 Standard](https://fmi-standard.org/).
  - `str::FMU2Component`: Mutable struct represents an instantiated instance of an FMU in the [FMI 2.0.2 Standard](https://fmi-standard.org/).
-- `t_start::Union{Real, Nothing} = nothing`: Set the start time to a value of type Real or the default value from the model description is used.
-- `t_stop::Union{Real, Nothing} = nothing`: Set the end time to a value of type Real or the default value from the model description is used.
+- `tspan::Union{Tuple{Float64, Float64}, Nothing}=nothing`: Sets the time span as a tuple or the default value from the model description is used. 
 
 # Keywords
 - `tolerance::Union{Real, Nothing} = nothing`: Real number to set the tolerance for any OED-solver
@@ -790,13 +816,19 @@ More detailed: `fmi2Struct = Union{FMU2, FMU2Component}`
 - `solver = nothing`: Any Julia-supported OED-solver  (default is Tsit5). More Info: [DifferentialEquations.jl Documentation](https://diffeq.sciml.ai/stable/solvers/ode_solve/#ode_solve)
 - `customFx = nothing`: [deperecated] Ability to give a custom state derivative function ẋ=f(x,t)
 - `recordValues::fmi2ValueReferenceFormat = nothing`: AbstractArray of variables (strings or variableIdentifiers) to record. Results are returned as `DiffEqCallbacks.SavedValues`
-- `saveat = []`: Time points to save values at (interpolated). More Info: [DifferentialEquations.jl Documentation](https://diffeq.sciml.ai/stable/basics/common_solver_opts/#Output-Control)
+- `saveat = nothing`: Time points to save values at (interpolated). More Info: [DifferentialEquations.jl Documentation](https://diffeq.sciml.ai/stable/basics/common_solver_opts/#Output-Control)
+- `x0::Union{AbstractArray{<:Real}, Nothing} = nothing`: Stores the specific value of `fmi2ScalarVariable` containing the modelVariables with the identical fmi2ValueReference to the input variable vr (vr = vrs[i]). And is therefore passed within prepareSolveFMU to fmi2Set , to set the start state.
 - `setup::Bool = true`: Boolean, if FMU should be setup (default: setup=true)
 - `reset::Union{Bool, Nothing} = nothing`: Boolean, if FMU should be reset before simulation (default: reset:=auto)
+- `instantiate::Union{Bool, Nothing} = nothing`: Boolean value that decides whether to create a new instance of the specified fmu.
+- `freeInstance::Union{Bool, Nothing} = nothing`: Boolean value that determines whether to dispose of the given instance, unload the loaded model, and free the allocated memory and other resources allocated by the FMU interface functions.
+- `terminate::Union{Bool, Nothing} = nothing`: Boolean value that tells the FMU that the simulation run will be aborted.
 - `inputValueReferences::fmi2ValueReferenceFormat = nothing`: AbstractArray of input variables (strings or variableIdentifiers) to set at every simulation step
 - `inputFunction = nothing`: Function to retrieve the values to set the inputs to
 - `parameters::Union{Dict{<:Any, <:Any}, Nothing} = nothing`: Dictionary of parameter variables (strings or variableIdentifiers) and values (Real, Integer, Boolean, String) to set parameters during initialization
 - `dtmax::Union{Real, Nothing} = nothing`: Real number for setting maximum dt for adaptive timestepping for the ODE solver. The default values are package dependent. More Info: [DifferentialEquations.jl Documentation](https://diffeq.sciml.ai/stable/basics/common_solver_opts/#Stepsize-Control)
+- `callbacks = []`: custom callbacks to add.
+- `showProgress::Bool = true`: Boolean value that determines whether a progress bar is generated for a task
 - `kwargs...`: Further parameters of already defined functions `solve(args..., kwargs...)` from the library [DifferentialEquations.jl](https://diffeq.sciml.ai/stable/#DifferentialEquations.jl:-Scientific-Machine-Learning-(SciML)-Enabled-Simulation-and-Estimation)
 
 # Returns
@@ -808,15 +840,13 @@ More detailed: `fmi2Struct = Union{FMU2, FMU2Component}`
 - FMISpec2.0.2[p.22]: 2.1.4 Inquire Platform and Version Number of Header Files
 - FMISpec2.0.2[p.16]: 2.1.2 Platform Dependent Definitions
 
-See also [`fmi2SimulateME`](@ref) [`fmi2SimulateCS`](@ref), [`fmi2Simulate`](@ref), [`fmi2Struct`](@ref), [`FMU2`](@ref), [`FMU2Component`](@ref).
-
+See also [`fmi2SimulateME`](@ref) [`fmi2SimulateCS`](@ref), [`fmi2Simulate`](@ref).
 """
 function fmiSimulateME(str::fmi2Struct, tspan::Union{Tuple{Float64, Float64}, Nothing}=nothing, args...; kwargs...)
     fmi2SimulateME(str, tspan, args...; kwargs...)
 end
 
 """
-
     fmiUnload(fmu::FMU2)
 
 Unloads the FMU and all its instances and frees the allocated memory.
@@ -836,10 +866,11 @@ function fmiUnload(fmu::FMU2)
 end
 
 """
-
     fmiGetNumberOfStates(str::fmi2Struct)
 
 Returns the number of states of the FMU.
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `str::fmi2Struct`:  Representative for an FMU in the [FMI 2.0.2 Standard](https://fmi-standard.org/).
@@ -855,17 +886,18 @@ More detailed: `fmi2Struct = Union{FMU2, FMU2Component}`
 - FMISpec2.0.2[p.22]: 2.1.4 Inquire Platform and Version Number of Header Files
 - FMISpec2.0.2[p.16]: 2.1.2 Platform Dependent Definitions
 
-See also [`fmi2GetNumberOfStates`](@ref), [`fmi2Struct`](@ref), [`FMU2`](@ref), [`FMU2Component`](@ref).
+See also [`fmi2GetNumberOfStates`](@ref).
 """
 function fmiGetNumberOfStates(str::fmi2Struct)
     fmi2GetNumberOfStates(str)
 end
 
 """
-
     fmiGetTypesPlatform(str::fmi2Struct)
 
 Returns the header file used to compile the FMU. By default returns `default`, version independent.
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `str::fmi2Struct`:  Representative for an FMU in the [FMI 2.0.2 Standard](https://fmi-standard.org/).
@@ -881,17 +913,18 @@ More detailed: `fmi2Struct = Union{FMU2, FMU2Component}`
 - FMISpec2.0.2[p.22]: 2.1.4 Inquire Platform and Version Number of Header Files
 - FMISpec2.0.2[p.16]: 2.1.2 Platform Dependent Definitions
 
-See also [`fmi2GetVersion`](@ref), [`fmi2Struct`](@ref), [`FMU2`](@ref), [`FMU2Component`](@ref).
+See also [`fmi2GetVersion`](@ref).
 """
 function fmiGetTypesPlatform(str::fmi2Struct)
     fmi2GetTypesPlatform(str)
 end
 
 """
-
     fmiGetVersion(str::fmi2Struct)
 
 Returns the version of the FMU, version independent.
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `str::fmi2Struct`:  Representative for an FMU in the FMI 2.0.2 Standard.
@@ -907,16 +940,17 @@ More detailed: `fmi2Struct = Union{FMU2, FMU2Component}`
  - FMISpec2.0.2[p.22]: 2.1.4 Inquire Platform and Version Number of Header Files
  - FMISpec2.0.2[p.16]: 2.1.2 Platform Dependent Definitions
 
-See also [`fmi2GetVersion`](@ref), [`unsafe_string`](https://docs.julialang.org/en/v1/base/strings/#Base.unsafe_string), [`fmi2Struct`](@ref), [`FMU2`](@ref), [`FMU2Component`](@ref).
+See also [`fmi2GetVersion`](@ref), [`unsafe_string`](https://docs.julialang.org/en/v1/base/strings/#Base.unsafe_string).
 """
 function fmiGetVersion(str::fmi2Struct)
     fmi2GetVersion(str)
 end
-
 """
     fmiInfo(str::fmi2Struct)
 
 Prints FMU-specific information into the REPL.
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `str::fmi2Struct`:  Representative for an FMU in the FMI 2.0.2 Standard.
@@ -930,17 +964,18 @@ More detailed: `fmi2Struct = Union{FMU2, FMU2Component}`
 # Source
  - FMISpec2.0.2 Link: [https://fmi-standard.org/](https://fmi-standard.org/)
 
-See also [`fmi2Info`](@ref), [`fmi2Struct`](@ref), [`FMU2`](@ref), [`FMU2Component`](@ref).
+See also [`fmi2Info`](@ref).
 """
 function fmiInfo(str::fmi2Struct)
     fmi2Info(str)
 end
 
 """
-
     fmiGet(str::fmi2Struct, comp::FMU2Component, vrs::fmi2ValueReferenceFormat)
 
 Returns the specific value of `fmi2ScalarVariable` containing the modelVariables with the identical fmi2ValueReference in an array.
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `str::fmi2Struct`:  Representative for an FMU in the FMI 2.0.2 Standard.
@@ -957,7 +992,7 @@ More detailed: `fmi2ValueReferenceFormat = Union{Nothing, String, Array{String,1
 - FMISpec2.0.2 Link: [https://fmi-standard.org/](https://fmi-standard.org/)
 - FMISpec2.0.2[p.23]: 2.1.6 Initialization, Termination, and Resetting an FMU
 - FMISpec2.0.2[p.18]: 2.1.3 Status Returned by Functions
-
+See also [`fmi2Get`](@ref).
 """
 function fmiGet(str::fmi2Struct, args...; kwargs...)
     fmi2Get(str, args...; kwargs...)
@@ -965,6 +1000,10 @@ end
 
 """
    fmiGet!(str::fmi2Struct, comp::FMU2Component, vrs::fmi2ValueReferenceFormat, dstArray::AbstractArray)
+
+Returns the specific value of `fmi2ScalarVariable` containing the modelVariables with the identical fmi2ValueReference in an array.
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `str::fmi2Struct`:  Representative for an FMU in the FMI 2.0.2 Standard.
@@ -994,8 +1033,9 @@ function fmiGet!(str::fmi2Struct, args...; kwargs...)
 end
 
 """
+    fmiSet(str::fmi2Struct, comp::FMU2Component, vrs::fmi2ValueReferenceFormat, srcArray::AbstractArray; filter=nothing)
 
-   fmiSet(str::fmi2Struct, comp::FMU2Component, vrs::fmi2ValueReferenceFormat, srcArray::AbstractArray; filter=nothing)
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `str::fmi2Struct`:  Representative for an FMU in the FMI 2.0.2 Standard.
@@ -1027,10 +1067,11 @@ function fmiSet(str::fmi2Struct, args...; kwargs...)
 end
 
 """
-
     fmiGetReal(str::fmi2Struct, vr::fmi2ValueReferenceFormat)
 
 Returns the real values of an array of variables
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `str::fmi2Struct`:  Representative for an FMU in the FMI 2.0.2 Standard.
@@ -1048,7 +1089,7 @@ More detailed: `fmi2ValueReferenceFormat = Union{Nothing, String, Array{String,1
 - FMISpec2.0.2[p.24]: 2.1.7 Getting and Setting Variable Values
 - FMISpec2.0.2[p.18]: 2.1.3 Status Returned by Functions
 
- See also [`fmi2GetReal`](@ref),[`fmi2ValueReferenceFormat`](@ref), [`fmi2Struct`](@ref), [`FMU2`](@ref), [`FMU2Component`](@ref).
+ See also [`fmi2GetReal`](@ref),[`fmi2ValueReferenceFormat`](@ref).
 
 """
 function fmiGetReal(str::fmi2Struct, args...; kwargs...)
@@ -1056,20 +1097,19 @@ function fmiGetReal(str::fmi2Struct, args...; kwargs...)
 end
 
 """
-#TODO
     fmiSampleJacobian(str::fmi2Struct, c::FMU2Component,
                                        vUnknown_ref::Array{fmi2ValueReference},
                                        vKnown_ref::Array{fmi2ValueReference},
                                        steps::Array{fmi2Real} = ones(fmi2Real, length(vKnown_ref)).*1e-5)
-
     fmiSampleJacobian(str::fmi2Struct, c::FMU2Component,
                                        vUnknown_ref::AbstractArray{fmi2ValueReference},
                                        vKnown_ref::AbstractArray{fmi2ValueReference},
                                        steps::Union{AbstractArray{fmi2Real}, Nothing} = nothing)
 
-
-
 This function samples the jacobian by manipulating corresponding values (central differences).
+
+
+! This is a wrapper for a function inside the library FMIImport.jl
 
 # Arguments
 - `str::fmi2Struct`:  Representative for an FMU in the FMI 2.0.2 Standard.
@@ -1078,17 +1118,17 @@ More detailed: `fmi2Struct = Union{FMU2, FMU2Component}`
  - `str::FMU2Component`: Mutable struct represents an instantiated instance of an FMU in the FMI 2.0.2 Standard.
 - `vUnknown_ref::Array{fmi2ValueReference}`:  Argument `vUnKnown_ref` contains values of type `fmi2ValueReference` which are identifiers of a variable value of the model.`vKnown_ref` is the Array of the vector values of Real input variables of function h that changes its value in the actual Mode.
 - `vKnown_ref::Array{fmi2ValueReference}`: Argument `vKnown_ref` contains values of type `fmi2ValueReference` which are identifiers of a variable value of the model.`vKnown_ref` is the Array of the vector values of Real input variables of function h that changes its value in the actual Mode.
-- `steps::Array{fmi2Real} = ones(fmi2Real, length(vKnown_ref)).*1e-5`:
-- `steps::Union{AbstractArray{fmi2Real}, Nothing} = nothing`:
+- `steps::Array{fmi2Real} = ones(fmi2Real, length(vKnown_ref)).*1e-5`: Predefined step size vector `steps`, where all entries have the value 1e-5.
+- `steps::Union{AbstractArray{fmi2Real}, Nothing} = nothing`:  Step size to be used for numerical differentiation. If nothing, a default value will be chosen automatically.
 
 # Returns
-- `dvUnknown::Arrya{fmi2Real}`:
+- `dvUnknown::Arrya{fmi2Real}`: Returns the directional derivative vector values.
 
 # Source
 - FMISpec2.0.2 Link: [https://fmi-standard.org/](https://fmi-standard.org/)
 - FMISpec2.0.2[p.16]: 2.1.2 Platform Dependent Definitions (fmi2TypesPlatform.h)
 
-See also [`fmi2SampleJacobian`](@ref), [`fmi2Struct`](@ref), [`FMU2`](@ref), [`FMU2Component`](@ref), [`fmi2ValueReference`](@ref).
+See also [`fmi2SampleJacobian`](@ref).
 """
 function fmiSampleJacobian(str::fmi2Struct, args...; kwargs...)
     fmi2SampleJacobian(str, args...; kwargs...)
